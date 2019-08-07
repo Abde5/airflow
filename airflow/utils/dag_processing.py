@@ -817,7 +817,7 @@ class DagFileProcessorManager(LoggingMixin):
             self.log.debug("Starting DagFileProcessorManager in sync mode")
 
         while True:
-            """
+
             loop_start_time = time.time()
 
             if self._signal_conn.poll(poll_time):
@@ -837,12 +837,11 @@ class DagFileProcessorManager(LoggingMixin):
                 # are told to (as that would open another connection to the
                 # SQLite DB which isn't a good practice
                 continue"
-            """
-            self._refresh_dag_dir()
-            """
-            simple_dags = self.heartbeat()
-            for simple_dag in simple_dags:
-                self._signal_conn.send(simple_dag)
+
+            #self._refresh_dag_dir()
+            #simple_dags = self.heartbeat()
+            #for simple_dag in simple_dags:
+            #    self._signal_conn.send(simple_dag)
 
             if not self._async_mode:
                 self.log.debug(
@@ -881,7 +880,7 @@ class DagFileProcessorManager(LoggingMixin):
                     poll_time = 1 - loop_duration
                 else:
                     poll_time = 0.0
-            """
+
     def _refresh_dag_dir(self):
         """
         Refresh file paths from dag dir if we haven't done it for too long.
