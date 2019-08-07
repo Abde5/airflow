@@ -884,7 +884,7 @@ class DagFileProcessorManager(LoggingMixin):
     def _refresh_dag_dir(self):
         """
         Refresh file paths from dag dir if we haven't done it for too long.
-        """
+
         elapsed_time_since_refresh = (timezone.utcnow() -
                                       self.last_dag_dir_refresh_time).total_seconds()
         if elapsed_time_since_refresh > self.dag_dir_list_interval:
@@ -900,6 +900,8 @@ class DagFileProcessorManager(LoggingMixin):
                 self.clear_nonexistent_import_errors()
             except Exception:
                 self.log.exception("Error removing old import errors")
+        """
+        pass
 
     def _print_stat(self):
         """
