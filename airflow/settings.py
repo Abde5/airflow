@@ -93,7 +93,7 @@ HEADER = '\n'.join([
     r' _/_/  |_/_/  /_/    /_/    /_/  \____/____/|__/',
 ])
 
-LOGGING_LEVEL = logging.INFO
+LOGGING_LEVEL = logging.DEBUG
 
 # the prefix to append to gunicorn worker processes after init
 GUNICORN_WORKER_READY_PREFIX = "[ready] "
