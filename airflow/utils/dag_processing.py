@@ -315,6 +315,8 @@ def list_py_file_paths(directory, safe_mode=True,
 
     global PROCESSED_FILES
 
+    logging.log.debug("We have already %d files.", len(PROCESSED_FILES))
+
     if include_examples is None:
         include_examples = conf.getboolean('core', 'LOAD_EXAMPLES')
     file_paths = []
