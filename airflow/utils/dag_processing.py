@@ -817,6 +817,7 @@ class DagFileProcessorManager(LoggingMixin):
             self.log.debug("Starting DagFileProcessorManager in sync mode")
 
         while True:
+            """
             loop_start_time = time.time()
 
             if self._signal_conn.poll(poll_time):
@@ -835,10 +836,10 @@ class DagFileProcessorManager(LoggingMixin):
                 # In "sync" mode we don't want to parse the DAGs until we
                 # are told to (as that would open another connection to the
                 # SQLite DB which isn't a good practice
-                continue
-
+                continue"
+            """
             self._refresh_dag_dir()
-
+            """
             simple_dags = self.heartbeat()
             for simple_dag in simple_dags:
                 self._signal_conn.send(simple_dag)
@@ -880,11 +881,11 @@ class DagFileProcessorManager(LoggingMixin):
                     poll_time = 1 - loop_duration
                 else:
                     poll_time = 0.0
-
+            """
     def _refresh_dag_dir(self):
         """
         Refresh file paths from dag dir if we haven't done it for too long.
-
+        """
         elapsed_time_since_refresh = (timezone.utcnow() -
                                       self.last_dag_dir_refresh_time).total_seconds()
         if elapsed_time_since_refresh > self.dag_dir_list_interval:
@@ -900,8 +901,6 @@ class DagFileProcessorManager(LoggingMixin):
                 self.clear_nonexistent_import_errors()
             except Exception:
                 self.log.exception("Error removing old import errors")
-        """
-        pass
 
     def _print_stat(self):
         """
