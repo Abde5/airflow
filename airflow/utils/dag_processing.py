@@ -60,7 +60,7 @@ if six.PY2:
 
 # In this list we have the list of files that have been already processed
 class ProcessedFiles(object):
-    paths = {}
+    paths = set()
 
 class SimpleDag(BaseDag):
     """
