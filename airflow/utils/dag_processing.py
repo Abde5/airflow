@@ -59,7 +59,7 @@ if six.PY2:
     ConnectionError = IOError
 
 # In this list we have the list of files that have been already processed
-PROCESSED_FILES = {}
+PROCESSED_FILES = set()
 
 class SimpleDag(BaseDag):
     """
