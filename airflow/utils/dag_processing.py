@@ -299,10 +299,13 @@ COMMENT_PATTERN = re.compile(r"\s*#.*")
 
 def fetch_processed_files():
     processed_files = set()
-    with open("processed_files", "r") as list_of_files:
-        for i in list_of_files:
-            processed_files.add(i.strip())
-    return processed_files
+
+    try:
+        with open("processed_files", "r") as list_of_files:
+            for i in list_of_files:
+                processed_files.add(i.strip())
+    finally:
+        return processed_files
 
 def add_processed_files(processed_files):
     with open("processed_files", "w") as list_of_files:
