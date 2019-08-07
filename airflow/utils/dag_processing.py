@@ -59,7 +59,8 @@ if six.PY2:
     ConnectionError = IOError
 
 # In this list we have the list of files that have been already processed
-PROCESSED_FILES = set()
+class ProcessedFiles(object):
+    paths = {}
 
 class SimpleDag(BaseDag):
     """
@@ -313,9 +314,8 @@ def list_py_file_paths(directory, safe_mode=True,
     :rtype: list[unicode]
     """
 
-    global PROCESSED_FILES
     log = LoggingMixin().log
-    log.debug("We have already %d files.", len(PROCESSED_FILES))
+    log.debug("We have already %d files.", len(ProcessedFiles.paths))
 
     if include_examples is None:
         include_examples = conf.getboolean('core', 'LOAD_EXAMPLES')
@@ -374,9 +374,9 @@ def list_py_file_paths(directory, safe_mode=True,
                     if not might_contain_dag:
                         continue
 
-                    if not file_path in PROCESSED_FILES:
+                    if not file_path in ProcessedFiles.paths:
                         file_paths.append(file_path)
-                        PROCESSED_FILES.add(file_path)
+                        ProcessedFiles.paths.add(file_path)
 
                 except Exception:
                     log = LoggingMixin().log
