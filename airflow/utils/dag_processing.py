@@ -836,7 +836,7 @@ class DagFileProcessorManager(LoggingMixin):
                 # In "sync" mode we don't want to parse the DAGs until we
                 # are told to (as that would open another connection to the
                 # SQLite DB which isn't a good practice
-                continue"
+                continue
 
             #self._refresh_dag_dir()
             #simple_dags = self.heartbeat()
