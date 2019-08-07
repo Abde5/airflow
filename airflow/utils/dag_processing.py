@@ -58,6 +58,8 @@ from airflow.utils.log.logging_mixin import LoggingMixin
 if six.PY2:
     ConnectionError = IOError
 
+# In this list we have the list of files that have been already processed
+PROCESSED_FILES = {}
 
 class SimpleDag(BaseDag):
     """
@@ -310,6 +312,9 @@ def list_py_file_paths(directory, safe_mode=True,
     :return: a list of paths to Python files in the specified directory
     :rtype: list[unicode]
     """
+
+    global PROCESSED_FILES
+
     if include_examples is None:
         include_examples = conf.getboolean('core', 'LOAD_EXAMPLES')
     file_paths = []
@@ -367,7 +372,10 @@ def list_py_file_paths(directory, safe_mode=True,
                     if not might_contain_dag:
                         continue
 
-                    file_paths.append(file_path)
+                    if not file_path in PROCESSED_FILES:
+                        file_paths.append(file_path)
+                        PROCESSED_FILES.add(file_path)
+
                 except Exception:
                     log = LoggingMixin().log
                     log.exception("Error while examining %s", f)
