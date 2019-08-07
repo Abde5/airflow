@@ -58,9 +58,6 @@ from airflow.utils.log.logging_mixin import LoggingMixin
 if six.PY2:
     ConnectionError = IOError
 
-# In this list we have the list of files that have been already processed
-class ProcessedFiles(object):
-    paths = set()
 
 class SimpleDag(BaseDag):
     """
@@ -300,6 +297,17 @@ def correct_maybe_zipped(fileloc):
 
 COMMENT_PATTERN = re.compile(r"\s*#.*")
 
+def fetch_processed_files():
+    processed_files = set()
+    with open("processed_files", "r") as list_of_files:
+        for i in list_of_files:
+            processed_files.add(i.strip())
+    return processed_files
+
+def add_processed_files(processed_files):
+    with open("processed_files", "w") as list_of_files:
+        for i in processed_files:
+            list_of_files.write(i + "\n")
 
 def list_py_file_paths(directory, safe_mode=True,
                        include_examples=None):
@@ -314,8 +322,8 @@ def list_py_file_paths(directory, safe_mode=True,
     :rtype: list[unicode]
     """
 
-    log = LoggingMixin().log
-    log.debug("We have already %d files.", len(ProcessedFiles.paths))
+    # we fetch already processed files
+    already_processed_files = fetch_processed_files()
 
     if include_examples is None:
         include_examples = conf.getboolean('core', 'LOAD_EXAMPLES')
@@ -374,9 +382,9 @@ def list_py_file_paths(directory, safe_mode=True,
                     if not might_contain_dag:
                         continue
 
-                    if not file_path in ProcessedFiles.paths:
+                    if not file_path in already_processed_files:
                         file_paths.append(file_path)
-                        ProcessedFiles.paths.add(file_path)
+                        already_processed_files.add(file_path)
 
                 except Exception:
                     log = LoggingMixin().log
@@ -385,6 +393,10 @@ def list_py_file_paths(directory, safe_mode=True,
         import airflow.example_dags
         example_dag_folder = airflow.example_dags.__path__[0]
         file_paths.extend(list_py_file_paths(example_dag_folder, safe_mode, False))
+
+    # we save already processed files
+    add_processed_files(already_processed_files)
+
     return file_paths
 
 
